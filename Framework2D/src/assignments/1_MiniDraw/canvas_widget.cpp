@@ -6,6 +6,9 @@
 #include "imgui.h"
 #include "shapes/line.h"
 #include "shapes/rect.h"
+#include "shapes/ellipse.h"
+#include "shapes/polygon.h"
+#include "shapes/freehand.h"
 
 namespace USTC_CG
 {
@@ -18,6 +21,8 @@ void Canvas::draw()
     mouse_move_event();
     if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
         mouse_release_event();
+    if (is_hovered_ && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+        mouse_click_right_event();
 
     draw_shapes();
 }
@@ -55,6 +60,23 @@ void Canvas::set_rect()
 }
 
 // HW1_TODO: more shape types, implements
+void Canvas::set_ellipse()
+{
+    draw_status_ = false;
+    shape_type_ = kEllipse;
+}
+
+void Canvas::set_polygon()
+{
+    draw_status_ = false;
+    shape_type_ = kPolygon;
+}
+
+void Canvas::set_freehand()
+{
+    draw_status_ = false;
+    shape_type_ = kFreehand;
+}
 
 void Canvas::clear_shape_list()
 {
@@ -101,7 +123,7 @@ void Canvas::draw_shapes()
 void Canvas::mouse_click_event()
 {
     // HW1_TODO: Drawing rule for more primitives
-    if (!draw_status_)
+    if (!draw_status_) // Click to start drawing
     {
         draw_status_ = true;
         start_point_ = end_point_ = mouse_pos_in_canvas();
@@ -124,17 +146,47 @@ void Canvas::mouse_click_event()
                 break;
             }
             // HW1_TODO: case USTC_CG::Canvas::kEllipse:
+            case USTC_CG::Canvas::kEllipse:
+            {
+                current_shape_ = std::make_shared<Ellipse>(
+                    start_point_.x, start_point_.y, end_point_.x, end_point_.y);
+                break;
+            }
+            case USTC_CG::Canvas::kPolygon:
+            {
+                current_shape_ = std::make_shared<Polygon>(
+                    start_point_.x, start_point_.y, end_point_.x, end_point_.y);
+                break;
+            }
+            case USTC_CG::Canvas::kFreehand:
+            {
+                current_shape_ = std::make_shared<Freehand>(
+                    start_point_.x, start_point_.y, end_point_.x, end_point_.y);
+                break;
+            }
             default: break;
         }
     }
     else
     {
-        draw_status_ = false;
-        if (current_shape_)
+        // Click to add control point of polygon
+        if(dynamic_cast<Polygon*>(current_shape_.get()))
         {
-            shape_list_.push_back(current_shape_);
-            current_shape_.reset();
+            end_point_ = mouse_pos_in_canvas();
+            current_shape_->add_control_point(end_point_.x, end_point_.y);
         }
+    }
+}
+
+void Canvas::mouse_click_right_event()
+{
+    // Click right mouth button to confirm the last vertex
+    // and complete polygon drawing
+    if (draw_status_ && shape_type_ == kPolygon)
+    {
+        draw_status_ = false;
+        shape_list_.push_back(current_shape_);
+        current_shape_.reset();
     }
 }
 
@@ -144,16 +196,23 @@ void Canvas::mouse_move_event()
     if (draw_status_)
     {
         end_point_ = mouse_pos_in_canvas();
-        if (current_shape_)
-        {
-            current_shape_->update(end_point_.x, end_point_.y);
-        }
+        current_shape_->update(end_point_.x, end_point_.y);
     }
 }
 
 void Canvas::mouse_release_event()
 {
     // HW1_TODO: Drawing rule for more primitives
+    // Release to end drawing except polygon
+    if (draw_status_ && shape_type_ != kPolygon)
+    {
+        draw_status_ = false;
+        if(current_shape_)
+        {
+            shape_list_.push_back(current_shape_);
+            current_shape_.reset();
+        }
+    }
 }
 
 ImVec2 Canvas::mouse_pos_in_canvas() const

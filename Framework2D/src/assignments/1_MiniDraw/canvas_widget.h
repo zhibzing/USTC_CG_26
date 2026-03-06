@@ -29,6 +29,7 @@ class Canvas : public Widget
         kRect = 2,
         kEllipse = 3,
         kPolygon = 4,
+        kFreehand = 5,
     };
 
     // Shape type setters.
@@ -36,6 +37,9 @@ class Canvas : public Widget
     void set_line();
     void set_rect();
     // HW1_TODO: more shape types.
+    void set_ellipse();
+    void set_polygon();
+    void set_freehand();
 
     // Clears all shapes from the canvas.
     void clear_shape_list();
@@ -52,9 +56,10 @@ class Canvas : public Widget
     void draw_shapes();
 
     // Event handlers for mouse interactions.
-    void mouse_click_event();
+    void mouse_click_event(); // Start drawing and add control point(polygon)
+    void mouse_click_right_event(); // End polygon drawing
     void mouse_move_event();
-    void mouse_release_event();
+    void mouse_release_event(); // End drawing(except polygon)
 
     // Calculates mouse's relative position in the canvas.
     ImVec2 mouse_pos_in_canvas() const;
