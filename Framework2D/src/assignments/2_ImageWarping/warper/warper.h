@@ -10,6 +10,12 @@
 // warp(...) function to perform the actual warping.
 #pragma once
 
+#include "common/image_widget.h"
+#include "Eigen/Dense"
+
+#include <vector>
+#include <iostream>
+
 namespace USTC_CG
 {
 class Warper
@@ -18,7 +24,13 @@ class Warper
     virtual ~Warper() = default;
 
     // HW2_TODO: A virtual function warp(...)
+    virtual std::pair<int, int> warp(int x, int y) const = 0;
     
     // HW2_TODO: other functions or variables if you need
+    int point_num = 0;
+    std::vector<Eigen::Vector2d> m_point_p, m_point_q;
+
+    // Add a pair of start point and end point to m_point_p and m_point_q
+    void update(const std::vector<ImVec2> start_points, const std::vector<ImVec2> end_points);
 };
 }  // namespace USTC_CG

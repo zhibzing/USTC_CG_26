@@ -1,4 +1,7 @@
 #include "warping_widget.h"
+#include "warper/warper.h"
+#include "warper/IDW_warper.h"
+#include "warper/RBF_warper.h"
 
 #include <cmath>
 #include <iostream>
@@ -158,14 +161,52 @@ void WarpingWidget::warping()
         {
             // HW2_TODO: Implement the IDW warping
             // use selected points start_points_, end_points_ to construct the map
-            std::cout << "IDW not implemented." << std::endl;
+            IDWWarper warping;
+            warping.update(start_points_, end_points_);
+            warping.update_IDW();
+            for (int y = 0; y < data_->height(); ++y)
+            {
+                for (int x = 0; x < data_->width(); ++x)
+                {
+                    // Apply warping function to (x, y), and we can get (x', y')
+                    auto [new_x, new_y] = warping.warp(x, y);
+                    // Copy the color from the original image to the result
+                    // image
+                    if (new_x >= 0 && new_x < data_->width() && new_y >= 0 &&
+                        new_y < data_->height())
+                    {
+                        std::vector<unsigned char> pixel =
+                            data_->get_pixel(x, y);
+                        warped_image.set_pixel(new_x, new_y, pixel);
+                    }
+                }
+            }
             break;
         }
         case kRBF:
         {
             // HW2_TODO: Implement the RBF warping
             // use selected points start_points_, end_points_ to construct the map
-            std::cout << "RBF not implemented." << std::endl;
+            RBFWarper warping;
+            warping.update(start_points_, end_points_);
+            warping.update_RBF();
+            for (int y = 0; y < data_->height(); ++y)
+            {
+                for (int x = 0; x < data_->width(); ++x)
+                {
+                    // Apply warping function to (x, y), and we can get (x', y')
+                    auto [new_x, new_y] = warping.warp(x, y);
+                    // Copy the color from the original image to the result
+                    // image
+                    if (new_x >= 0 && new_x < data_->width() && new_y >= 0 &&
+                        new_y < data_->height())
+                    {
+                        std::vector<unsigned char> pixel =
+                            data_->get_pixel(x, y);
+                        warped_image.set_pixel(new_x, new_y, pixel);
+                    }
+                }
+            }
             break;
         }
         default: break;
