@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/image_widget.h"
+#include "Eigen/Dense"
 
 namespace USTC_CG
 {
@@ -30,12 +31,16 @@ class WarpingWidget : public ImageWidget
         kFisheye = 1,
         kIDW = 2,
         kRBF = 3,
+        kNeural = 4,
+        kHolefill = 5,
     };
     // Warping type setters.
     void set_default();
     void set_fisheye();
     void set_IDW();
     void set_RBF();
+    void set_neural();
+    void set_holefill();
 
     // Point selecting interaction
     void enable_selecting(bool flag);
@@ -52,6 +57,7 @@ class WarpingWidget : public ImageWidget
     bool flag_enable_selecting_points_ = false;
     bool draw_status_ = false;
     WarpingType warping_type_;
+    Eigen::MatrixXi filled_mask;
 
    private:
     // A simple "fish-eye" warping function

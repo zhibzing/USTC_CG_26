@@ -2,6 +2,9 @@
 #include "warper/warper.h"
 #include "warper/IDW_warper.h"
 #include "warper/RBF_warper.h"
+#include "warper/Neural_warper.h"
+#include "warper/Holefill.h"
+#include "Eigen/Dense"
 
 #include <cmath>
 #include <iostream>
@@ -15,6 +18,9 @@ WarpingWidget::WarpingWidget(const std::string& label, const std::string& filena
 {
     if (data_)
         back_up_ = std::make_shared<Image>(*data_);
+
+    filled_mask.resize(data_->height(), data_->width());
+    filled_mask.setConstant(1);
 }
 
 void WarpingWidget::draw()
@@ -119,11 +125,14 @@ void WarpingWidget::warping()
     // Create a new image to store the result
     Image warped_image(*data_);
     // Initialize the color of result image
-    for (int y = 0; y < data_->height(); ++y)
+    if (warping_type_ != kHolefill)
     {
-        for (int x = 0; x < data_->width(); ++x)
+        for (int y = 0; y < data_->height(); ++y)
         {
-            warped_image.set_pixel(x, y, { 0, 0, 0 });
+            for (int x = 0; x < data_->width(); ++x)
+            {
+                warped_image.set_pixel(x, y, { 0, 0, 0 });
+            }
         }
     }
 
@@ -137,6 +146,7 @@ void WarpingWidget::warping()
             // transfer it to (x', y') in the new image: Note: For this
             // transformation ("fish-eye" warping), one can also calculate the
             // inverse (x', y') -> (x, y) to fill in the "gaps".
+            filled_mask.setConstant(0);
             for (int y = 0; y < data_->height(); ++y)
             {
                 for (int x = 0; x < data_->width(); ++x)
@@ -152,6 +162,7 @@ void WarpingWidget::warping()
                         std::vector<unsigned char> pixel =
                             data_->get_pixel(x, y);
                         warped_image.set_pixel(new_x, new_y, pixel);
+                        filled_mask(new_y, new_x) = 1;
                     }
                 }
             }
@@ -161,8 +172,9 @@ void WarpingWidget::warping()
         {
             // HW2_TODO: Implement the IDW warping
             // use selected points start_points_, end_points_ to construct the map
+            filled_mask.setConstant(0);
             IDWWarper warping;
-            warping.update(start_points_, end_points_);
+            warping.update(start_points_, end_points_, warped_image);
             warping.update_IDW();
             for (int y = 0; y < data_->height(); ++y)
             {
@@ -178,6 +190,7 @@ void WarpingWidget::warping()
                         std::vector<unsigned char> pixel =
                             data_->get_pixel(x, y);
                         warped_image.set_pixel(new_x, new_y, pixel);
+                        filled_mask(new_y, new_x) = 1;
                     }
                 }
             }
@@ -187,8 +200,9 @@ void WarpingWidget::warping()
         {
             // HW2_TODO: Implement the RBF warping
             // use selected points start_points_, end_points_ to construct the map
+            filled_mask.setConstant(0);
             RBFWarper warping;
-            warping.update(start_points_, end_points_);
+            warping.update(start_points_, end_points_, warped_image);
             warping.update_RBF();
             for (int y = 0; y < data_->height(); ++y)
             {
@@ -204,9 +218,44 @@ void WarpingWidget::warping()
                         std::vector<unsigned char> pixel =
                             data_->get_pixel(x, y);
                         warped_image.set_pixel(new_x, new_y, pixel);
+                        filled_mask(new_y, new_x) = 1;
                     }
                 }
             }
+            break;
+        }
+        case kNeural:
+        {
+            filled_mask.setConstant(0);
+            NeuralWarper warping;
+            warping.update(start_points_, end_points_, warped_image);
+            warping.update_neural();
+            for (int y = 0; y < data_->height(); ++y)
+            {
+                for (int x = 0; x < data_->width(); ++x)
+                {
+                    // Apply warping function to (x, y), and we can get (x', y')
+                    auto [new_x, new_y] = warping.warp(x, y);
+                    // Copy the color from the original image to the result
+                    // image
+                    if (new_x >= 0 && new_x < data_->width() && new_y >= 0 &&
+                        new_y < data_->height())
+                    {
+                        std::vector<unsigned char> pixel =
+                            data_->get_pixel(x, y);
+                        warped_image.set_pixel(new_x, new_y, pixel);
+                        filled_mask(new_y, new_x) = 1;
+                    }
+                }
+            }
+            break;
+        }
+        case kHolefill:
+        {
+            HolefillWarper warping;
+            warping.update_holefill(warped_image, filled_mask);
+            warping.Holefill(warped_image);
+            filled_mask.setConstant(1);
             break;
         }
         default: break;
@@ -218,6 +267,7 @@ void WarpingWidget::warping()
 void WarpingWidget::restore()
 {
     *data_ = *back_up_;
+    filled_mask.setConstant(1);
     update();
 }
 void WarpingWidget::set_default()
@@ -235,6 +285,14 @@ void WarpingWidget::set_IDW()
 void WarpingWidget::set_RBF()
 {
     warping_type_ = kRBF;
+}
+void WarpingWidget::set_neural()
+{
+    warping_type_ = kNeural;
+}
+void WarpingWidget::set_holefill()
+{
+    warping_type_ = kHolefill;
 }
 void WarpingWidget::enable_selecting(bool flag)
 {

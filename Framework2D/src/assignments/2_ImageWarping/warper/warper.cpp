@@ -6,7 +6,7 @@
 
 namespace USTC_CG
 {
-    void Warper::update(const std::vector<ImVec2> start_points, const std::vector<ImVec2> end_points)
+    void Warper::update(const std::vector<ImVec2> start_points, const std::vector<ImVec2> end_points, const Image& image)
     {
         int size = start_points.size();
         for (int i = 0; i < size; i++){

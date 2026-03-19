@@ -1,0 +1,11 @@
+<map id="USTC_CG::Warper" name="USTC_CG::Warper">
+<area shape="rect" id="Node000001" title=" " alt="" coords="296,5,420,160"/>
+<area shape="rect" id="Node000002" href="$class_u_s_t_c___c_g_1_1_holefill_warper.html" title=" " alt="" coords="5,208,169,576"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="282,127,232,164,182,210,171,224,167,221,179,206,228,160,285,123"/>
+<area shape="rect" id="Node000003" href="$class_u_s_t_c___c_g_1_1_i_d_w_warper.html" title=" " alt="" coords="193,293,344,491"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="333,172,299,295,294,293,330,177"/>
+<area shape="rect" id="Node000004" href="$class_u_s_t_c___c_g_1_1_neural_warper.html" title=" " alt="" coords="368,240,529,544"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="385,171,407,241,401,240,383,176"/>
+<area shape="rect" id="Node000005" href="$class_u_s_t_c___c_g_1_1_r_b_f_warper.html" title=" " alt="" coords="553,293,704,491"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="433,119,491,158,519,181,544,206,573,248,597,294,591,293,569,250,540,210,515,185,488,162,433,125"/>
+</map>
