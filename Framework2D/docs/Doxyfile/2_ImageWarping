@@ -6,12 +6,12 @@
 PROJECT_NAME           = "Framework2D"
 
 # 输入路径 - 你的源代码位置
-INPUT                  = ./src./assignments./2_ImageWarping
+INPUT                  = ../../src./assignments./2_ImageWarping
 RECURSIVE              = YES
 FILE_PATTERNS          = *.h *.hpp *.cpp
 
 # 输出目录 - 图片会在这里
-OUTPUT_DIRECTORY       = ./docs./2_ImageWarping
+OUTPUT_DIRECTORY       = ../../docs./2_ImageWarping
 HTML_OUTPUT            = .
 
 # 提取所有类信息

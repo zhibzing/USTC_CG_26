@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace USTC_CG
 {
 class Shape
@@ -14,6 +16,8 @@ class Shape
         unsigned char line_color[4] = { 255, 0, 0, 255 };
         float line_thickness = 2.0f;
     };
+
+    bool is_closed = false;
 
    public:
     virtual ~Shape() = default;
@@ -39,6 +43,11 @@ class Shape
      * @param x, y Dragging point. e.g. end point of a line.
      */
     virtual void update(float x, float y) = 0;
+    /**
+     * Gets the interior pixels of the shape
+     * This function is used to get the interior pixels of the selected region.
+     */
+    virtual std::vector<std::pair<int, int>> get_interior_pixels() const = 0;
     /**
      * Adds a control point to the shape.
      * This function is used to add control points to the shape, which can be

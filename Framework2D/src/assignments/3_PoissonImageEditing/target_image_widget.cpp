@@ -1,4 +1,7 @@
 #include "target_image_widget.h"
+#include "clone/clone.h"
+#include "clone/seamlessclone.h"
+#include "clone/mixinggradients.h"
 
 #include <cmath>
 
@@ -68,6 +71,11 @@ void TargetImageWidget::set_seamless()
     clone_type_ = kSeamless;
 }
 
+void TargetImageWidget::set_mixinggradients()
+{
+    clone_type_ = kMixinggradients;
+}
+
 void TargetImageWidget::clone()
 {
     // The implementation of different types of cloning
@@ -124,6 +132,58 @@ void TargetImageWidget::clone()
             // by solving Poisson Equations.
             restore();
 
+            SeamlessClone clone;
+            clone.update(source_image_, data_, mask, mouse_position_);
+            std::shared_ptr<Image> tar_clone = clone.solve();
+            for (int x = 0; x < mask->width(); ++x)
+            {
+                for (int y = 0; y < mask->height(); ++y)
+                {
+                    int tar_x =
+                        static_cast<int>(mouse_position_.x) + x -
+                        static_cast<int>(source_image_->get_position().x);
+                    int tar_y =
+                        static_cast<int>(mouse_position_.y) + y -
+                        static_cast<int>(source_image_->get_position().y);
+                    if (0 <= tar_x && tar_x < image_width_ && 0 <= tar_y &&
+                        tar_y < image_height_ && mask->get_pixel(x, y)[0] > 0)
+                    {
+                        data_->set_pixel(
+                            tar_x,
+                            tar_y,
+                            tar_clone->get_pixel(x, y));
+                    }
+                }
+            }
+            break;
+        }
+        case USTC_CG::TargetImageWidget::kMixinggradients:
+        {
+            restore();
+
+            MixingGradients clone;
+            clone.update(source_image_, data_, mask, mouse_position_);
+            std::shared_ptr<Image> tar_clone = clone.solve();
+            for (int x = 0; x < mask->width(); ++x)
+            {
+                for (int y = 0; y < mask->height(); ++y)
+                {
+                    int tar_x =
+                        static_cast<int>(mouse_position_.x) + x -
+                        static_cast<int>(source_image_->get_position().x);
+                    int tar_y =
+                        static_cast<int>(mouse_position_.y) + y -
+                        static_cast<int>(source_image_->get_position().y);
+                    if (0 <= tar_x && tar_x < image_width_ && 0 <= tar_y &&
+                        tar_y < image_height_ && mask->get_pixel(x, y)[0] > 0)
+                    {
+                        data_->set_pixel(
+                            tar_x,
+                            tar_y,
+                            tar_clone->get_pixel(x, y));
+                    }
+                }
+            }
             break;
         }
         default: break;

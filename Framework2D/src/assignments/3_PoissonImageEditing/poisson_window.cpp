@@ -84,6 +84,33 @@ void PoissonWindow::draw_toolbar()
 
         ImGui::Separator();
 
+        if (ImGui::BeginMenu("Select Type"))
+        {
+            if (ImGui::MenuItem("Rect"))
+            {
+                std::cout << "Set shape to Rect" << std::endl;
+                p_source_->set_rect();
+            }
+            if (ImGui::MenuItem("Ellipse"))
+            {
+                std::cout << "Set shape to Ellipse" << std::endl;
+                p_source_->set_ellipse();
+            }
+            if (ImGui::MenuItem("Polygon"))
+            {
+                std::cout << "Set shape to Polygon" << std::endl;
+                p_source_->set_polygon();
+            }
+            if (ImGui::MenuItem("Freehand"))
+            {
+                std::cout << "Set shape to Freehand" << std::endl;
+                p_source_->set_freehand();
+            }
+            ImGui::EndMenu();
+        }
+
+        ImGui::Separator();
+
         if (ImGui::MenuItem("Paste") && p_target_ && p_source_)
         {
             p_target_->set_paste();
@@ -93,6 +120,21 @@ void PoissonWindow::draw_toolbar()
             "clone the selected region to the target image.");
         // HW3_TODO: You may add more items in the menu for the different types
         // of Poisson editing.
+        if (ImGui::MenuItem("SeamlessClone") && p_target_ && p_source_)
+        {
+            p_target_->set_seamless();
+        }
+        add_tooltips(
+            "Press this button and then click in the target image, to "
+            "seamlessclone the selected region to the target image.");
+
+        if (ImGui::MenuItem("MixingGradients") && p_target_ && p_source_)
+        {
+            p_target_->set_mixinggradients();
+        }
+        add_tooltips(
+            "Press this button and then click in the target image, to "
+            "mixinggradients the selected region to the target image.");
 
         ImGui::EndMainMenuBar();
     }

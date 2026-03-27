@@ -59,5 +59,4 @@ std::vector<std::pair<int, int>> Rect::get_interior_pixels() const
     }
     return int_pixels;
 }
-
 }  // namespace USTC_CG

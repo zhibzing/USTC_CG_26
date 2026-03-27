@@ -2,6 +2,10 @@ project(3_PoissonImageEditing)
 file(GLOB source
   "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/*.h" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/clone/*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/clone/*.h" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/scanline/*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/scanline/*.h" 
   "${CMAKE_CURRENT_SOURCE_DIR}/shapes/*.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/shapes/*.h" 
 )

@@ -1,0 +1,35 @@
+var class_u_s_t_c___c_g_1_1_source_image_widget =
+[
+    [ "RegionType", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a80fe3b9fc08281e6bd637669cedda60b", [
+      [ "kDefault", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a80fe3b9fc08281e6bd637669cedda60ba6ac32e191305a2547c5f87765c93045c", null ],
+      [ "kRect", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a80fe3b9fc08281e6bd637669cedda60ba37d9b3cbdda63c8a42c2bac69877e34d", null ],
+      [ "kEllipse", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a80fe3b9fc08281e6bd637669cedda60ba23de4d83e5774200e571c9a3fe5c3246", null ],
+      [ "kPolygon", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a80fe3b9fc08281e6bd637669cedda60ba2c7b063e2c0951dd31d6fe2d13ebf9c1", null ],
+      [ "kFreehand", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a80fe3b9fc08281e6bd637669cedda60ba225c86fa40f01e6184e6b3b0137a8ec6", null ]
+    ] ],
+    [ "SourceImageWidget", "class_u_s_t_c___c_g_1_1_source_image_widget.html#afd684a4cd23cd0245a7dd43aa5692702", null ],
+    [ "~SourceImageWidget", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a87d3e6a56c30307859675ad658c3327a", null ],
+    [ "draw", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a89784bea33034c194f3c0b4249c3ea87", null ],
+    [ "enable_selecting", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a4e837a9d788814448c4f7a5b9a4150c8", null ],
+    [ "get_data", "class_u_s_t_c___c_g_1_1_source_image_widget.html#acb0eb9e122d15d4999f46fd77ec40c4e", null ],
+    [ "get_position", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a896a8dc107865cc109064df3ccd95e8f", null ],
+    [ "get_region_mask", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a4eb161b7954f47c6116d24abb9dcd84c", null ],
+    [ "mouse_click_event", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a5d109f3e1b5a058a335bd5ac0c34a3b6", null ],
+    [ "mouse_click_right_event", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a3d6fa16ddf427c55f99fad1e11c79bba", null ],
+    [ "mouse_move_event", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a2ec980b1c2ea49b9ea75c35b7922c1f4", null ],
+    [ "mouse_pos_in_canvas", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a7408cb624f58808673d1819d31c3e6b8", null ],
+    [ "mouse_release_event", "class_u_s_t_c___c_g_1_1_source_image_widget.html#aa990c59c4cf1c59baa2efcc39e7931d2", null ],
+    [ "select_region", "class_u_s_t_c___c_g_1_1_source_image_widget.html#aaef7d90332cbad45733704a65c30b395", null ],
+    [ "set_ellipse", "class_u_s_t_c___c_g_1_1_source_image_widget.html#adecc9534b6a5794eb4e471c6497ae044", null ],
+    [ "set_freehand", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a389f92cf1567e63a7d7a18d97cc026d4", null ],
+    [ "set_polygon", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a877d3224d1e6bbf5d1310b0ae2b2526a", null ],
+    [ "set_rect", "class_u_s_t_c___c_g_1_1_source_image_widget.html#ac733af38890f2f2ea61f707192862461", null ],
+    [ "update_selected_region", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a2afc70c8f32883172c0e7dabf8a9674e", null ],
+    [ "draw_status_", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a2e5db18ce973604bd3dcfd6e8364a64c", null ],
+    [ "end_", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a2f63ad71138821dafdaba6e5d22b225f", null ],
+    [ "flag_enable_selecting_region_", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a3cc257e6eb1a3b4ec7c9252cfb3e340c", null ],
+    [ "region_type_", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a0459f1abb090813c72765987b81d726b", null ],
+    [ "selected_region_mask_", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a1728c7244b59a1fb98cfdcf94c8a00c7", null ],
+    [ "selected_shape_", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a3b3514373c3e8ce02b9ba824c46a57d8", null ],
+    [ "start_", "class_u_s_t_c___c_g_1_1_source_image_widget.html#a01006b83f5ad4d0ba59805ca837dac64", null ]
+];

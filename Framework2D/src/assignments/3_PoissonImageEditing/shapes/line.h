@@ -31,6 +31,10 @@ class Line : public Shape
     // interaction
     void update(float x, float y) override;
 
+    // Get the interior rasterized pixels of the rectangle
+    // Returns the array of pixel coordinates that are inside the rectangle
+    std::vector<std::pair<int, int>> get_interior_pixels() const override;
+
    private:
     float start_point_x_, start_point_y_, end_point_x_, end_point_y_;
 };

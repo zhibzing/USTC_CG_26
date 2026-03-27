@@ -46,12 +46,12 @@ void SourceImageWidget::select_region()
     ImGuiIO& io = ImGui::GetIO();
     // Mouse events
     if (is_hovered_ && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-    {
         mouse_click_event();
-    }
     mouse_move_event();
     if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
         mouse_release_event();
+    if (is_hovered_ && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+        mouse_click_right_event();
 
     // Region Shape Visualization
     if (selected_shape_)
@@ -79,12 +79,37 @@ ImVec2 SourceImageWidget::get_position() const
     return start_;
 }
 
+void SourceImageWidget::set_rect()
+{
+    draw_status_ = false;
+    region_type_ = kRect;
+}
+
+void SourceImageWidget::set_ellipse()
+{
+    draw_status_ = false;
+    region_type_ = kEllipse;
+}
+
+void SourceImageWidget::set_polygon()
+{
+    draw_status_ = false;
+    region_type_ = kPolygon;
+}
+
+void SourceImageWidget::set_freehand()
+{
+    draw_status_ = false;
+    region_type_ = kFreehand;
+}
+
 void SourceImageWidget::mouse_click_event()
 {
     // Start drawing the region 
     if (!draw_status_)
     {
         draw_status_ = true;
+        selected_shape_.reset();
         start_ = end_ = mouse_pos_in_canvas();
         // HW3_TODO(optional): You can add more shapes for region selection. You
         // can also consider using the implementation in HW1. (We use rectangle
@@ -98,8 +123,47 @@ void SourceImageWidget::mouse_click_event()
                     std::make_unique<Rect>(start_.x, start_.y, end_.x, end_.y);
                 break;
             }
+            case USTC_CG::SourceImageWidget::kEllipse:
+            {
+                selected_shape_ =
+                    std::make_unique<Ellipse>(start_.x, start_.y, end_.x, end_.y);
+                break;
+            }
+            case USTC_CG::SourceImageWidget::kPolygon:
+            {
+                selected_shape_ =
+                    std::make_unique<Polygon>(start_.x, start_.y, end_.x, end_.y);
+                break;
+            }
+            case USTC_CG::SourceImageWidget::kFreehand:
+            {
+                selected_shape_ =
+                    std::make_unique<Freehand>(start_.x, start_.y);
+                break;
+            }
             default: break;
         }
+    }
+    else
+    {
+        // Click to add control point of polygon
+        if(dynamic_cast<Polygon*>(selected_shape_.get()))
+        {
+            end_ = mouse_pos_in_canvas();
+            selected_shape_->add_control_point(end_.x, end_.y);
+        }
+    }
+}
+
+void SourceImageWidget::mouse_click_right_event()
+{
+    // Click right mouth button to confirm the last vertex
+    // and complete polygon drawing
+    if (draw_status_ && region_type_ == kPolygon)
+    {
+        // Update the selected region.
+        update_selected_region();
+        draw_status_ = false;
     }
 }
 
@@ -117,11 +181,11 @@ void SourceImageWidget::mouse_move_event()
 void SourceImageWidget::mouse_release_event()
 {
     // Finish drawing the region
-    if (draw_status_ && selected_shape_)
+    if (draw_status_ && region_type_ != kPolygon)
     {
-        draw_status_ = false;
         // Update the selected region.
         update_selected_region();
+        draw_status_ = false;
     }
 }
 

@@ -1,0 +1,39 @@
+#---------------------------------------------------------------------------
+# 专门生成图片类图的配置
+#---------------------------------------------------------------------------
+
+# 项目名称
+PROJECT_NAME           = "Framework2D"
+
+# 输入路径 - 你的源代码位置
+INPUT                  = ../../src./assignments./1_MiniDraw
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h *.hpp *.cpp
+
+# 输出目录 - 图片会在这里
+OUTPUT_DIRECTORY       = ../../docs./1_MiniDraw
+HTML_OUTPUT            = .
+
+# 提取所有类信息
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+# Graphviz 设置
+HAVE_DOT               = YES
+DOT_IMAGE_FORMAT       = png
+DOT_NUM_THREADS        = 4
+
+# 生成 UML 风格的类图
+UML_LOOK               = YES
+
+# 生成各种类图图片
+CLASS_GRAPH            = YES          # 类继承图
+COLLABORATION_GRAPH    = YES          # 类协作图
+GRAPHICAL_HIERARCHY    = YES          # 完整类层次图
+
+# 生成 HTML 方便查看
+GENERATE_HTML          = YES
+
+# 关闭其他输出
+GENERATE_LATEX         = NO
