@@ -1,28 +1,22 @@
 from torchvision import transforms
 from torch.utils.data import DataLoader
+from torchvision.datasets import CIFAR10
+from torch.utils.data import Subset
 import numpy as np
-import torch
-import torchvision
 import matplotlib.pyplot as plt
 
 
-def load_transformed_dataset(img_size=256, batch_size=128) -> DataLoader:
-    # Load dataset and perform data transformations
+def load_transformed_dataset(img_size=32, batch_size=64):
     data_transforms = [
         transforms.Resize((img_size, img_size)),
-        transforms.ToTensor(),  # Scales data into [0,1]
-        transforms.Lambda(lambda t: (t * 2) - 1),  # Scale between [-1, 1]
+        transforms.ToTensor(),
+        transforms.Lambda(lambda t: (t * 2) - 1),
     ]
     data_transform = transforms.Compose(data_transforms)
-
-    # TODO: 你可以更改这两个地方的路径，以实现对其他数据集的加载
-    # 当然，你也可以添加更多的参数，以支持不同数据集之间的修改
-    train = torchvision.datasets.ImageFolder(root="./datasets-1/train", transform=data_transform)
-
-    test = torchvision.datasets.ImageFolder(root="./datasets-1/test", transform=data_transform)
-
-    dataset = torch.utils.data.ConcatDataset([train, test])
-
+    
+    full_dataset = CIFAR10(root="./data", train=True, download=True, transform=data_transform)
+    dataset = Subset(full_dataset, range(1000))
+    
     return DataLoader(dataset, batch_size=batch_size, shuffle=True, drop_last=True)
 
 
