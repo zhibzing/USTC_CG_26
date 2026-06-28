@@ -132,7 +132,7 @@ class RenderFormer(nn.Module, PyTorchModelHubMixin):
         :param tri_vpos_list: [batch_size, max_num_tri, 9], padded
         :param texture_patch_list: [batch_size, max_num_tri, texture_channel, patch_size, patch_size], padded
         :param valid_mask: [batch_size, max_num_tri]
-        :param vns: [batch_size, max_num_tri, 3, 3], padded
+        :param vns: [batch_size, max_num_tri, 9], padded  (three vertex normals concatenated)
         :return: [batch_size, num_register_tokens + max_num_tri, latent_dim]
         """
         batch_size = tri_vpos_list.size(0)
@@ -148,17 +148,11 @@ class RenderFormer(nn.Module, PyTorchModelHubMixin):
             texture_patch_list.reshape(texture_patch_list.size(0), texture_patch_list.size(1), -1)
         ))
 
-        # ====== HW8_TODO: Implement Triangle Embedding ======
-        # Build the transformer input sequence:
-        #   1. Start with learnable register tokens (self.reg_tokens).
-        #   2. For each triangle, combine its positional encoding
-        #      (NeRF PE or RoPE), texture embedding (tri_tex_emb),
-        #      vertex normal embedding (vn_emb), and a learnable
-        #      triangle token (self.tri_token) into a single token.
-        #      Different pe_type ('nerf' vs 'rope') require different treatment.
-        #   3. Concatenate all tokens into the final sequence.
-        # ====================================================
-        raise NotImplementedError("HW8_TODO: Triangle Embedding")
+        # Base token: learnable token + normal + texture (no absolute position encoding when using RoPE)
+        token = self.tri_token + vn_emb + tri_tex_emb  # broadcast
+
+        # Concatenate register tokens in front
+        seq = torch.cat([self.reg_tokens.expand(batch_size, -1, -1), token], dim=1)
 
         # pad triangle pos (for RoPE) and valid mask (for all)
         # use center pos for RoPE on auxiliary tokens
